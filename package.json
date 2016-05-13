@@ -2,14 +2,18 @@
   "name": "express-frontend-worlflow",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
+  "jsnext:main": "build/index.es2015.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Skullmasher",
   "license": "ISC",
   "devDependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "node-sass-middleware": "^0.9.8",
+    "postcss-middleware": "^1.0.0"
   }
 }
