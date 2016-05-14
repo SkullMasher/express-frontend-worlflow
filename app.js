@@ -4,6 +4,7 @@ const express = require('express')
 const sassMiddleware = require('node-sass-middleware')
 const path = require('path')
 const app = express()
+const postcssMiddleware = require('postcss-middleware')
 
 app.use(sassMiddleware({
   /* Options */
@@ -16,7 +17,6 @@ app.use(sassMiddleware({
 }))
 // Note: you must place sass-middleware *before* `express.static` or else it will
 // not work.
-app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(postcssMiddleware({
   plugins: [
@@ -29,7 +29,6 @@ app.use(postcssMiddleware({
     return path.join(destPath, req.url);
   }
 }));
-
 
 app.use('/css', express.static('app/css'));
 app.use('/js', express.static('app/js'));
