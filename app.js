@@ -6,14 +6,21 @@ const path              = require('path')
 const postcssMiddleware = require('postcss-middleware')
 const autoprefixer      = require('autoprefixer')
 const chalk             = require('chalk')
-const app = express()
+const cons              = require('consolidate')
+const app               = express()
+
+
+// set .html as the default extension 
 
 const appDir = 'app'
 const buildDir = 'build'
 
-const routes = require( __dirname + '/' + appDir + '/routes/routes')(app)
+const routes = require(__dirname + '/' + appDir + '/routes/routes')(app)
 
 app
+  .engine('html', cons.hogan)
+  .set('view engine', 'html')
+  .set('views', __dirname + '/' + appDir + '/views')
   .use(sassMiddleware({
     /* Options */
     src: appDir,
@@ -37,9 +44,6 @@ app
   .use('/css', express.static('app/css'))
   .use('/js', express.static('app/js'))
   .use('/img', express.static('app/img'))
-  .get('/', function (req, res) {
-      res.send('lodr')
-  })
 
 let server = app.listen(3000, function () {
     console.log('Dev server started on ' + chalk.cyan('http://localhost:' + server.address().port))
