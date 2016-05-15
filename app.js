@@ -1,35 +1,47 @@
 'use strict'
 
-const express = require('express')
-const sassMiddleware = require('node-sass-middleware')
-const path = require('path')
-const app = express()
+const express           = require('express')
+const sassMiddleware    = require('node-sass-middleware')
+const path              = require('path')
 const postcssMiddleware = require('postcss-middleware')
+const autoprefixer      = require('autoprefixer')
 
-app.use(sassMiddleware({
-  /* Options */
-  src: __dirname,
-  dest: path.join(__dirname, 'public'),
-  debug: true,
-  outputStyle: 'expended',
-  sourceMap: true,
-  prefix: '/prefix' // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
-}))
+const app = express()
+
+const appDir = 'app'
+const buildDir = 'build'
+
+app
+  .use(sassMiddleware({
+    /* Options */
+    src: appDir,
+    dest: buildDir,
+    debug: true,
+    outputStyle: 'expended',
+    sourceMap: true,
+    prefix: '/prefix' // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+  }))
 // Note: you must place sass-middleware *before* `express.static` or else it will
 // not work.
+  .use(postcssMiddleware({
+    plugins: [
+      /* Plugins */
+      autoprefixer({
+        /* Options */
+      })
+    ],
+    src: function(req) {
+      return path.join('build', req.url);
+    }
+  }))
+  .use('/css', express.static('app/css'))
+  .use('/js', express.static('app/js'))
+  .use('/img', express.static('app/img'))
+  .get('/', function (req, res) {
+      res.send('lodr')
+  })
 
-app.use(postcssMiddleware({
-  plugins: [
-    /* Plugins */
-    autoprefixer({
-      /* Options */
-    })
-  ],
-  src: function(req) {
-    return path.join(destPath, req.url);
-  }
-}));
+let server = app.listen(3000, function () {
+    console.log('Dev server started on http://localhost:' + server.address().port)
+})
 
-app.use('/css', express.static('app/css'));
-app.use('/js', express.static('app/js'));
-app.use('/img', express.static('app/img'));

@@ -5,15 +5,18 @@
   "main": "app.js",
   "jsnext:main": "build/index.es2015.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
+    "build": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Skullmasher",
   "license": "ISC",
   "devDependencies": {
+    "autoprefixer": "^6.3.6",
     "express": "^4.13.4",
     "node-sass-middleware": "^0.9.8",
+    "nodemon": "^1.9.2",
     "postcss-middleware": "^1.0.0"
   }
 }
