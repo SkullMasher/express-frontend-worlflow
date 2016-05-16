@@ -9,6 +9,7 @@ const autoprefixer      = require('autoprefixer')
 const consolidate       = require('consolidate')
 const app               = express()
 const favicon           = require('serve-favicon')
+const browserSync       = require('browser-sync')
 
 const appDir = 'app'
 const buildDir = 'build'
@@ -48,7 +49,7 @@ app
   .use('/js', express.static(path.join(__dirname, jsDir)))
   .use('/img', express.static(path.join(__dirname, imgDir)))
 
-const routes = require(__dirname + '/' + appDir + '/routes/routes')(app)
+const routes = require('./' + appDir + '/routes/routes')(app)
 
 let server = app.listen(3000, function () {
     console.log('Dev server started on ' + chalk.cyan('http://localhost:' + server.address().port))
