@@ -1,56 +1,60 @@
 'use strict'
 
-const chalk             = require('chalk')
-const path              = require('path')
-const express           = require('express')
-const sassMiddleware    = require('node-sass-middleware')
+const chalk = require('chalk')
+const path = require('path')
+const express = require('express')
+const nodeSass = require('node-sass')
 const postcssMiddleware = require('postcss-middleware')
-const autoprefixer      = require('autoprefixer')
-const consolidate       = require('consolidate')
-const app               = express()
-const favicon           = require('serve-favicon')
-const browserSync       = require('browser-sync')
+const autoprefixer = require('autoprefixer')
+const consolidate = require('consolidate')
+const app = express()
+const favicon = require('serve-favicon')
+const connrectBrowserSync = require('connect-browser-sync')
+const bs = require('browser-sync')
 
-const appDir = 'app'
-const buildDir = 'build'
-const sassDir = appDir + '/sass'
-const cssDir = appDir + '/css'
-const jsDir = appDir + '/js'
-const imgDir = appDir + '/img'
+const appPath = {
+  appDir: 'app',
+  buildDir: 'build',
+  sassDir: this.appDir + '/sass',
+  cssDir: this.appDir + '/css',
+  jsDir: this.appDir + '/js',
+  imgDir: this.appDir + '/img'
+}
 
+// console.log for 1337 h4X0r
+let log = console.log.bind(console)
 
-console.log(path.join(__dirname, imgDir, 'favicon.ico'))
+// Log errors in promise catch block
+let catchError = function (err) { log(err) }
+
+// Greeting Message
+let greetingMessage = function () {
+  log(chalk.red('  #####   '))
+  log(chalk.red(' #######  '))
+  log(chalk.red('#  ###  # ') + chalk.grey(' The mighty Skull is starting your project.'))
+  log(chalk.red('#   #   # '))
+  log(chalk.red('######### ') + chalk.grey(' Happy coding !'))
+  log(chalk.red(' ### ###  '))
+  log(chalk.red('  #####   '))
+  log(chalk.red('  # # #   ') + chalk.grey(' Play more, care less, be an heartless'))
+}
+
+greetingMessage()
+
+require('./' + appPath.appDir + '/config/browserSync')(bs, appPath)
 
 app
   .engine('html', consolidate.hogan)
   .set('view engine', 'html')
-  .set('views', __dirname + '/' + appDir + '/views')
-  .use(favicon(path.join(__dirname, imgDir, 'favicon.ico')))
-  .use(sassMiddleware({
-    /* Options */
-    src: path.join(__dirname, sassDir),
-    dest: path.join(__dirname, cssDir),
-    debug: true,
-    outputStyle: 'expended',
-    sourceMap: true
-  }))
-  // .use(postcssMiddleware({
-  //   plugins: [
-  //     /* Plugins */
-  //     autoprefixer({
-  //       /* Options */
-  //     })
-  //   ],
-  //   src: function(req) {
-  //     return __dirname + cssDir;
-  //   }
-  // }))
-  .use('/css', express.static(path.join(__dirname, cssDir)))
-  .use('/js', express.static(path.join(__dirname, jsDir)))
-  .use('/img', express.static(path.join(__dirname, imgDir)))
+  .set('views', path.join(__dirname, appPath.appDir, '/views'))
+  .use(favicon(path.join(__dirname, appPath.imgDir, 'favicon.ico')))
+  // .use(connrectBrowserSync())
+  .use('/css', express.static(path.join(__dirname, appPath.cssDir)))
+  .use('/js', express.static(path.join(__dirname, appPath.jsDir)))
+  .use('/img', express.static(path.join(__dirname, appPath.imgDir)))
 
-const routes = require('./' + appDir + '/routes/routes')(app)
+require('./' + appPath.appDir + '/routes/routes')(app)
 
-let server = app.listen(3000, function () {
-    console.log('Dev server started on ' + chalk.cyan('http://localhost:' + server.address().port))
+let expressServer = app.listen(3000, function () {
+  log('Dev server started on ' + chalk.cyan('http://localhost:' + expressServer.address().port))
 })
