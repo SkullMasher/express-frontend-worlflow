@@ -4,18 +4,21 @@ module.exports = function (bs, appPath, sass, path, chalk, dateFormat, Promise, 
 
   // Reload all browser on HTML change
   bs.watch(path.join(appPath.appDir, '*.html')).on('change', function () {
+    log('Watching ' + path.join(appPath.appDir, '*.html') + ' for changes.')
     bs.notify("<span color='green'>HTML Reloaded</span>", 2000)
     bs.reload()
   })
 
   // Reload all browser on JS change
-  bs.watch(path.join(appPath.appDir, appPath.jsDir, '**.js')).on('change', function () {
-    bs.notify("<span color='green'>JS Reloaded</span>", 2000)
-    bs.reload()
-  })
+  // bs.watch(path.join(appPath.appDir, appPath.jsDir, '**.js')).on('change', function () {
+  //   log('Watching ' + path.join(appPath.appDir, appPath.jsDir, '**.js') + 'for changes.')
+  //   bs.notify("<span color='green'>JS Reloaded</span>", 2000)
+  //   bs.reload()
+  // })
 
   // Specific compilation for SASS file
   bs.watch(path.join(appPath.appDir, appPath.sassDir, '**.scss'), function (event, file) {
+    log('Watching' + path.join(appPath.appDir, appPath.sassDir, '**.scss') + ' for changes.')
     if (event === 'change') {
       sass.render({
         file: path.join(appPath.appDir, appPath.sassDir, 'style.scss'),
