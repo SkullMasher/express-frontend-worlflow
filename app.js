@@ -58,7 +58,7 @@ app
   .use('/js', express.static(path.join(__dirname, appPath.jsDir)))
   .use('/img', express.static(path.join(__dirname, appPath.imgDir)))
 
-require('./' + appPath.appDir + '/routes/routes')(app)
+const routes = require('./' + appPath.appDir + '/routes/routes')(app)
 
 let expressServer = app.listen(3000, function () {
   log('Dev server started on ' + chalk.cyan('http://localhost:' + expressServer.address().port))

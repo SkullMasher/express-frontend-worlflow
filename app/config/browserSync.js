@@ -2,8 +2,10 @@ module.exports = function (bs, appPath, sass, path, chalk, dateFormat, Promise, 
   // console.log for 1337 h4X0r
   let log = console.log.bind(console)
 
+  log('called')
+
   // Reload all browser on HTML change
-  bs.watch(path.join(appPath.appDir, '*.html')).on('change', function () {
+  bs.watch(path.join(appPath.appDir, '**.html')).on('change', function () {
     log('Watching ' + path.join(appPath.appDir, '*.html') + ' for changes.')
     bs.notify("<span color='green'>HTML Reloaded</span>", 2000)
     bs.reload()
