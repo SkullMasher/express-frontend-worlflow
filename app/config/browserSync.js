@@ -1,32 +1,39 @@
-module.exports = function (bs, appPath, sass, path, chalk, dateFormat, Promise, fs) {
+const Promise = require('bluebird')
+const fs = Promise.promisifyAll(require('fs'))
+const chalk = require('chalk')
+const path = require('path')
+const dateFormat = require('dateformat')
+const sass = require('node-sass')
+
+module.exports = function (bs, appPath) {
   // console.log for 1337 h4X0r
   let log = console.log.bind(console)
 
+  log(path.join(appPath.cssDir))
+
   // Reload all browser on HTML change
-  bs.watch(path.join(appPath.appDir, '**.html')).on('change', function () {
-    log('Watching ' + path.join(appPath.appDir, '*.html') + ' for changes.')
+  bs.watch(path.join(appPath.viewDir, '**.html')).on('change', function () {
     bs.notify("<span color='green'>HTML Reloaded</span>", 2000)
     bs.reload()
   })
 
   // Reload all browser on JS change
-  // bs.watch(path.join(appPath.appDir, appPath.jsDir, '**.js')).on('change', function () {
-  //   log('Watching ' + path.join(appPath.appDir, appPath.jsDir, '**.js') + 'for changes.')
-  //   bs.notify("<span color='green'>JS Reloaded</span>", 2000)
-  //   bs.reload()
-  // })
+  bs.watch(path.join(appPath.jsDir, '**.js')).on('change', function () {
+    bs.notify("<span color='green'>JS Reloaded</span>", 2000)
+    bs.reload()
+  })
 
   // Specific compilation for SASS file
-  bs.watch(path.join(appPath.appDir, appPath.sassDir, '**.scss'), function (event, file) {
-    log('Watching' + path.join(appPath.appDir, appPath.sassDir, '**.scss') + ' for changes.')
+  bs.watch(path.join(appPath.scssDir, '**.scss'), function (event, file) {
     if (event === 'change') {
       sass.render({
-        file: path.join(appPath.appDir, appPath.sassDir, 'style.scss'),
+        file: path.join(appPath.scssDir, 'style.scss'),
         outputStyle: 'expanded',
-        outFile: path.join(appPath.appDir, appPath.cssDir, 'style.css'),
+        outFile: path.join(appPath.cssDir, 'style.css'),
         sourceMap: true
       }, function (error, result) {
         if (error) {
+          log(error)
           // Pretty Debug Message on sass error
           let nowFormat = dateFormat(new Date(), 'HH:MM:ss')
 
@@ -35,10 +42,10 @@ module.exports = function (bs, appPath, sass, path, chalk, dateFormat, Promise, 
           log(chalk.red('[SASS ERROR ' + nowFormat + '] ') + error.message)
         } else {
           // Creating css style files
-          fs.writeFile(path.join(appPath.appDir, appPath.cssDir, 'style.css'), result.css, function (err) {
+          fs.writeFile(path.join(appPath.cssDir, 'style.css'), result.css, function (err) {
             if (!err) {
               // Creating css map file WELCOME TO CALLBACK HELL !
-              fs.writeFile(path.join(appPath.appDir, appPath.cssDir, 'style.map.css'), result.map, function (err) {
+              fs.writeFile(path.join(appPath.cssDir, 'style.map.css'), result.map, function (err) {
                 if (!err) {
                   let nowFormat = dateFormat(new Date(), '[HH:MM:ss]')
                   log(nowFormat + chalk.green(' CSS Reloaded'))
@@ -54,9 +61,14 @@ module.exports = function (bs, appPath, sass, path, chalk, dateFormat, Promise, 
             }
           })
           // Injecting the CSS change in BrowserSync
-          bs.reload(appPath.appDir + 'css/style.css')
+          bs.reload(path.join(appPath.cssDir, '/style.css'))
         }
       })
     }
   })
+
+  log('Watching ' + path.join(appPath.scssDir, '**.scss') + ' for changes.')
+  log('Compiling css in ' + path.join(appPath.cssDir, '**.scss'))
+  log('Watching ' + path.join(appPath.viewDir, '**.html') + ' for changes.')
+  log('Watching ' + path.join(appPath.jsDir, '**.js') + 'for changes.')
 }

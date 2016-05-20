@@ -1,12 +1,8 @@
 'use strict'
 
-const Promise = require('bluebird')
-const fs = Promise.promisifyAll(require('fs'))
 const chalk = require('chalk')
 const path = require('path')
-const dateFormat = require('dateformat')
 const express = require('express')
-const sass = require('node-sass')
 const postcssMiddleware = require('postcss-middleware')
 const autoprefixer = require('autoprefixer')
 const consolidate = require('consolidate')
@@ -15,13 +11,15 @@ const favicon = require('serve-favicon')
 const connrectBrowserSync = require('connect-browser-sync')
 const bs = require('browser-sync').create()
 
+const appDir = 'app'
 const appPath = {
-  appDir: 'app',
-  buildDir: 'build',
-  sassDir: 'app/sass',
-  cssDir: 'app/css',
-  jsDir: 'app/js',
-  imgDir: 'app/img'
+  buildDir: path.join(appDir, 'build'),
+  scssDir: path.join(appDir, 'scss'),
+  cssDir: path.join(appDir, 'css'),
+  jsDir: path.join(appDir, 'js'),
+  viewDir: path.join(appDir, 'views'),
+  ctrlDir: path.join(appDir, 'controllers'),
+  imgDir: path.join(appDir, 'img')
 }
 
 // console.log for 1337 h4X0r
@@ -44,12 +42,12 @@ let greetingMessage = function () {
 
 greetingMessage()
 
-require('./' + appPath.appDir + '/config/browserSync') // Live reload
+require('./' + appDir + '/config/browserSync')(bs, appPath) // Live reload
 
 app
   .engine('html', consolidate.hogan)
   .set('view engine', 'html')
-  .set('views', path.join(__dirname, appPath.appDir, '/views'))
+  .set('views', path.join(__dirname, appDir, '/views'))
   .use(favicon(path.join(__dirname, appPath.imgDir, 'favicon.ico')))
   .use(connrectBrowserSync(bs.init({
     proxy: 'localhost:3000'
@@ -58,7 +56,7 @@ app
   .use('/js', express.static(path.join(__dirname, appPath.jsDir)))
   .use('/img', express.static(path.join(__dirname, appPath.imgDir)))
 
-require('./' + appPath.appDir + '/routes/routes')(app)
+require('./' + appDir + '/routes/routes')(app)
 
 let expressServer = app.listen(3000, function () {
   log('Dev server started on ' + chalk.cyan('http://localhost:' + expressServer.address().port))
