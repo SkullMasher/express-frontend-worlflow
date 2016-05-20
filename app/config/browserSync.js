@@ -4,9 +4,13 @@ const chalk = require('chalk')
 const path = require('path')
 const dateFormat = require('dateformat')
 const sass = require('node-sass')
-const log = require('../helpers/log.js')
 
 module.exports = function (bs, appPath) {
+  // console.log for 1337 h4X0r
+  let log = console.log.bind(console)
+
+  log(path.join(appPath.cssDir))
+
   // Reload all browser on HTML change
   bs.watch(path.join(appPath.viewDir, '**.html')).on('change', function () {
     bs.notify("<span color='green'>HTML Reloaded</span>", 2000)
@@ -19,7 +23,7 @@ module.exports = function (bs, appPath) {
     bs.reload()
   })
 
-  // Compilation of scss file into a css dir
+  // Specific compilation for SASS file
   bs.watch(path.join(appPath.scssDir, '**.scss'), function (event, file) {
     if (event === 'change') {
       sass.render({

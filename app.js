@@ -22,7 +22,11 @@ const appPath = {
   imgDir: path.join(appDir, 'img')
 }
 
-const log = require('./app/helpers/log.js')
+// console.log for 1337 h4X0r
+let log = console.log.bind(console)
+
+// Log errors in promise catch block
+let catchError = function (err) { log(err) }
 
 // Greeting Message
 let greetingMessage = function () {
