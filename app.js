@@ -17,7 +17,6 @@ const appPath = {
   scssDir: path.join(appDir, 'scss'),
   cssDir: path.join(appDir, 'css'),
   jsDir: path.join(appDir, 'js'),
-  helpersDir: path.join(appDir, 'helpers'),
   viewDir: path.join(appDir, 'views'),
   ctrlDir: path.join(appDir, 'controllers'),
   imgDir: path.join(appDir, 'img')
