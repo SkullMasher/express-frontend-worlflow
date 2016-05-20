@@ -17,16 +17,13 @@ const appPath = {
   scssDir: path.join(appDir, 'scss'),
   cssDir: path.join(appDir, 'css'),
   jsDir: path.join(appDir, 'js'),
+  helpersDir: path.join(appDir, 'helpers'),
   viewDir: path.join(appDir, 'views'),
   ctrlDir: path.join(appDir, 'controllers'),
   imgDir: path.join(appDir, 'img')
 }
 
-// console.log for 1337 h4X0r
-let log = console.log.bind(console)
-
-// Log errors in promise catch block
-let catchError = function (err) { log(err) }
+const log = require('./app/helpers/log.js')
 
 // Greeting Message
 let greetingMessage = function () {
