@@ -3,8 +3,7 @@
 const chalk = require('chalk')
 const path = require('path')
 const express = require('express')
-const postcssMiddleware = require('postcss-middleware')
-const autoprefixer = require('autoprefixer')
+
 const consolidate = require('consolidate')
 const app = express()
 const favicon = require('serve-favicon')
