@@ -4,7 +4,7 @@ var data = {
     {quote: 'Tatanka is my favorite dinosaur on ark.'},
     {quote: 'Omega district is awesome'}
   ],
-  topkek: 'toplel'
+  topkek: 'topkek'
 }
 
 module.exports = data
