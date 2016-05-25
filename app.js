@@ -3,7 +3,6 @@
 const chalk = require('chalk')
 const path = require('path')
 const express = require('express')
-
 const consolidate = require('consolidate')
 const app = express()
 const favicon = require('serve-favicon')

@@ -19,12 +19,12 @@
     "connect-browser-sync": "^2.0.1",
     "consolidate": "^0.14.1",
     "dateformat": "^1.0.12",
-    "express": "^4.13.4",
     "hogan.js": "^3.0.2",
     "node-sass": "^3.7.0",
-    "node-sass-middleware": "^0.9.8",
     "nodemon": "^1.9.2",
-    "postcss-middleware": "^1.0.0",
     "serve-favicon": "^2.3.0"
+  },
+  "dependencies": {
+    "express": "^4.13.4"
   }
 }
